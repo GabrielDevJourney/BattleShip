@@ -3,52 +3,78 @@ package src.Ship;
 import src.Helpers.Coordinate;
 import src.Enums.ShipType;
 
+import java.util.ArrayList;
+
+	/**
+	 * Abstract base class for all ships in the game.
+	 * Handles ship properties, hit tracking, and coordinate storage.
+ */
+
 public abstract class Ship {
-	protected int size;
-	protected int hitCounter;
-	protected boolean isSunk;
-	protected Coordinate[] positions;
-	protected ShipType type;
+	private int size;
+	private String name;
+	private int hitCounter;
+	private boolean isSunk;
+	private ArrayList<Coordinate> coordinates = new ArrayList<>();
+	private ShipType type;
 
 	public Ship(ShipType type) {
 		this.type = type;
 		this.size = type.getShipSize();
+		this.name = type.getName();
 	}
 
 	public int getSize() {
 		return size;
 	}
 
+	public int getHitCounter() {
+		return hitCounter;
+	}
+
 	public boolean isSunk() {
 		return isSunk;
 	}
 
-	public Coordinate[] getPositions() {
-		return positions;
+	public void setSunk(boolean sunk) {
+		isSunk = sunk;
 	}
 
-	public void occupyPositions(Coordinate[] coordinates){
-		//todo call this in scanner to populate ship its owns position if they are valid, meaning i need to call this
-		// to store coordinates only after checking if they are free
-		//todo i will need to store both row and col
+	public ArrayList<Coordinate> getPositions() {
+		return coordinates;
 	}
 
-	public void increaseHits(){
-		hitCounter++;
-	}
+	/**
+	 * fills ship coordinates will coordinates validated trough gameValidator
+	 */
+	public void fillCoordinates(ArrayList<Coordinate> newCoordinates) {
+		if (newCoordinates.size() != size) {
+			return;
+		}
 
-	//validate ship positions if true then cant place, false can place
-	//also each coordinate obj will have both row and col so
-	public boolean isPositionOccupied(int row, int col){
-
-		Coordinate checkCoordinate = new Coordinate(row,col);
-
-		for(Coordinate coordinate : positions){
-			if(coordinate.equals(checkCoordinate)){
-				return true;
+		for (Coordinate newCoordinate : newCoordinates) {
+			//since using list i can use stream to then see if there is any match
+			//anyMatch will use followed rule to check newCordinate with existing list coordinates
+			if (coordinates.stream().anyMatch(existentCoordinate ->
+					existentCoordinate.equals(newCoordinate))) {
+				return;//already exists placed ship in this coordinates
 			}
 		}
-		return false;
+		coordinates = newCoordinates; //no ship in here
+	}
+
+	/**
+	 * increase hit counter and set sunk state baed on counter => size of ship
+	 */
+	public void increaseHits() {
+		hitCounter++;
+		checkSunkState();
+	}
+
+	private void checkSunkState() {
+		if (hitCounter == size) {
+			setSunk(true);
+		}
 	}
 
 }
