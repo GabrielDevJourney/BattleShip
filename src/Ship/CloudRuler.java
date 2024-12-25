@@ -4,7 +4,7 @@ import src.Enums.ShipType;
 
 public class CloudRuler extends Ship{
 	public CloudRuler() {
-		super(ShipType.CARRIER);
+		super(ShipType.CLOUDRULER);
 	}
 
 }

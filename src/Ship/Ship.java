@@ -11,12 +11,12 @@ import java.util.ArrayList;
  */
 
 public abstract class Ship {
+	private ShipType type;
 	private int size;
 	private String name;
-	private int hitCounter;
 	private boolean isSunk;
+	private int hitCounter;
 	private ArrayList<Coordinate> coordinates = new ArrayList<>();
-	private ShipType type;
 
 	public Ship(ShipType type) {
 		this.type = type;

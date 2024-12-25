@@ -5,6 +5,7 @@ import src.Enums.ShipType;
 public class AbyssalAssassin extends Ship{
 
 	public AbyssalAssassin() {
-		super(ShipType.SUBMARINE);
+		super(ShipType.ABYSSALASSASIN);
 	}
+
 }
