@@ -32,7 +32,11 @@ public abstract class Ship {
 		return hitCounter;
 	}
 
-	public boolean isSunk() {
+		public String getName() {
+			return name;
+		}
+
+		public boolean isSunk() {
 		return isSunk;
 	}
 
