@@ -5,9 +5,9 @@ import src.Enums.ShipType;
 
 import java.util.ArrayList;
 
-	/**
-	 * Abstract base class for all ships in the game.
-	 * Handles ship properties, hit tracking, and coordinate storage.
+/**
+ * Abstract base class for all ships in the game.
+ * Handles ship properties, hit tracking, and coordinate storage.
  */
 
 public abstract class Ship {
@@ -32,11 +32,11 @@ public abstract class Ship {
 		return hitCounter;
 	}
 
-		public String getName() {
-			return name;
-		}
+	public String getName() {
+		return name;
+	}
 
-		public boolean isSunk() {
+	public boolean isSunk() {
 		return isSunk;
 	}
 
