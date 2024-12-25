@@ -1,4 +1,10 @@
 package src.Ship;
 
-public class DauntlessDefender {
+import src.Enums.ShipType;
+
+public class DauntlessDefender extends Ship {
+
+	public DauntlessDefender() {
+		super(ShipType.DAUNTLESSDEFENDER);
+	}
 }

@@ -14,4 +14,8 @@ public enum BoardState {
 	BoardState(String boardState) {
 		this.boardState = boardState;
 	}
+
+	public String getBoardState() {
+		return boardState;
+	}
 }
