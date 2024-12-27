@@ -28,11 +28,12 @@ public class Board {
 	 * Note: Using row[].length allows for future rectangular boards
 	 */
 
-	public void initializeBoardState() {
-		for (int row = 0; row < board.length; row++) {
+	//todo might go back to previous code
+	public void initializeBoardState(int row, int col) {
+		for (int x = row; x < board.length; x++) {
 			//going to all cols of given row
-			for (int col = 0; col < board[row].length; col++) {
-				board[row][col] = BoardState.WATER.getBoardState();
+			for (int y = col; y < board[row].length; y++) {
+				board[x][y] = BoardState.WATER.getBoardState();
 			}
 		}
 	}
