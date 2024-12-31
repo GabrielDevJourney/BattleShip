@@ -1,0 +1,65 @@
+/* menuStyles.css */
+
+.root {
+    -fx-font-family: "JetBrains Mono";
+}
+
+.settings-container {
+    -fx-spacing: 5px;
+}
+
+.game-settings-containers{
+    /* same width for all for better ui*/
+    -fx-pref-width: 250px;
+    -fx-spacing: 20px;
+    -fx-padding: 10px 30px;
+}
+.game-info-box{
+    -fx-padding: 10px 30px 30px 30px;
+}
+
+.game-info-grid-container{
+    -fx-padding : 20px;
+}
+
+.game-info-containers{
+    -fx-pref-width: 400px;
+    -fx-pref-height: 280px;
+    -fx-spacing: 20px;
+    -fx-padding: 30px;
+}
+
+.game-settings-title-text{
+    -fx-font-size: 28px;
+    -fx-font-weight: bold;
+}
+
+.simple-text{
+    -fx-font-size: 16px;
+}
+
+.title-text {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+}
+
+.option-text {
+    -fx-font-size: 16px;
+}
+
+.combo-box {
+    -fx-font-family: "JetBrains Mono";
+    -fx-font-size: 16px;
+}
+
+
+.bottom-buttons-container {
+    -fx-spacing: 10px;
+    -fx-padding: 10px;
+}
+
+.bottom-button{
+    -fx-pref-width: 120px;
+    -fx-pref-height: 60px;
+    -fx-font-size: 20px;
+}
