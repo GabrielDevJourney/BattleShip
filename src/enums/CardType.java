@@ -1,4 +1,4 @@
-package src.Enums;
+package src.enums;
 
 public enum CardType {
 	CROSS_STRIKE,
