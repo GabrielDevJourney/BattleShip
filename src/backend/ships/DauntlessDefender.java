@@ -1,6 +1,7 @@
-package src.Ship;
+package src.backend.ships;
 
-import src.Enums.ShipType;
+import src.enums.ShipType;
+import src.backend.models.Ship;
 
 public class DauntlessDefender extends Ship {
 

@@ -1,7 +1,7 @@
-package src.Ship;
+package src.backend.models;
 
-import src.Helpers.Coordinate;
-import src.Enums.ShipType;
+import src.utils.Coordinate;
+import src.enums.ShipType;
 
 import java.util.ArrayList;
 

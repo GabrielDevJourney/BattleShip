@@ -1,4 +1,4 @@
-package src.Enums;
+package src.enums;
 
 public enum ShipType {
 	CLOUDRULER("Cloud Ruler",5),//carrier

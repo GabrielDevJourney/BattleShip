@@ -1,4 +1,4 @@
-package src.Cards;
+package src.backend.cards;
 
 public class CrossStrike {
 }
