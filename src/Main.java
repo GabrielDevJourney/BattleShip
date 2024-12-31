@@ -1,40 +1,21 @@
 package src;
 
-import src.Enums.ScreenSizeType;
-import src.UI.UiHandler;
+import javafx.application.Application;
+import javafx.stage.Stage;
+import src.ui.UiManager;
 
-import java.io.IOException;
+public class Main extends Application {
+	@Override
+	public void start(Stage stage) {
+		UiManager uiManager = new UiManager(stage);
+		stage.setWidth(1000);
+		stage.setHeight(1200);
+		stage.setResizable(false);
+		stage.setTitle("BattleShip");
+		stage.show();
+	}
 
-public class Main {
 	public static void main(String[] args) {
-		try {
-			UiHandler ui = new UiHandler();
-			ui.init();
-
-			// Test different board sizes
-			/*
-			ui.drawBoardRectangle(ScreenSizeType.SMALL);
-			ui.refreshScreen();
-
-			Thread.sleep(2000);
-
-			ui.drawBoardRectangle(ScreenSizeType.MEDIUM);
-			ui.refreshScreen();
-
-			Thread.sleep(2000); // Pause to see result*/
-
-			ui.drawBoardRectangle(ScreenSizeType.LARGE);
-			ui.refreshScreen();
-
-			Thread.sleep(2000);
-
-			System.in.read();
-
-			ui.closeScreen();
-			ui.closeTerminal();
-
-		} catch (IOException | InterruptedException e) {
-			e.printStackTrace();
-		}
+		launch(args);
 	}
 }
