@@ -1,0 +1,28 @@
+.root {
+    -fx-font-family: "JetBrains Mono";
+}
+
+.cursor-color{
+    -fx-background-color : green;
+}
+
+.shadow-placement{
+    -fx-background-color : gray;
+}
+
+.grid-cell {
+   -fx-border-color: black;
+   -fx-border-width: 1px;
+   -fx-min-width: 30px;
+   -fx-min-height: 30px;
+   -fx-alignment: center;
+}
+
+.simple-text{
+    -fx-font-size: 16px;
+}
+
+.title-text {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+}
