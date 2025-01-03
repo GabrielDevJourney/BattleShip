@@ -424,7 +424,7 @@ public class MenuScreen {
 		//todo still need to handle the click action itself
 		GameSettings gameSettings = new GameSettings(boardSizeOption, shipQuantityOption, placementOption);
 		Game game = new Game(gameSettings);
-		uiManager.switchToPlacement();
+		uiManager.startPlacement(game);
 	}
 
 
