@@ -1,6 +1,7 @@
 package src.ui;
 
 import javafx.stage.Stage;
+import src.backend.game.Game;
 import src.ui.Screens.BattleScreen;
 import src.ui.Screens.MenuScreen;
 import src.ui.Screens.PlacementScreen;
@@ -19,7 +20,6 @@ public class UiManager {
 
 	private void initializeScreens() {
 		menuScreen = new MenuScreen(this); // Pass UiManager instead of Stage
-		placementScreen = new PlacementScreen(this);
 		battleScreen = new BattleScreen(this);
 	}
 
@@ -33,5 +33,11 @@ public class UiManager {
 
 	public void closeGame() {
 		mainStage.close();
+	}
+
+	//pass game to be able to initialize board in placement screen with proper settings
+	public void startPlacement(Game game) {
+		placementScreen = new PlacementScreen(this, game);
+		switchToPlacement();
 	}
 }
