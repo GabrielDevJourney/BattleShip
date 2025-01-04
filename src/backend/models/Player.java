@@ -1,7 +1,6 @@
 package src.backend.models;
 
 import java.util.ArrayList;
-import java.util.stream.Stream;
 
 public class Player {
 	//todo thin about moving all logic apart from data/get/set to Game class
