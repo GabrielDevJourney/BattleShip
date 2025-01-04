@@ -1,11 +1,10 @@
 package src.backend.game;
 
-import src.backend.models.Board;
 import src.backend.models.Player;
 import src.backend.models.Ship;
+import src.backend.ships.*;
 import src.enums.ShipType;
 import src.utils.Coordinate;
-import src.utils.ShipPlacementManager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,16 +14,19 @@ import java.util.stream.Stream;
 
 public class Game {
 	private Player[] players = new Player[2];
+	private Player currentPlayer;
+	private int currentPlayerIndex = 0;
 	private final GameSettings gameSettings;
 	private int boardSize;
 	private int shipQuantity;
 	private Map<ShipType,Integer> availableShips;
 	private List<List<Coordinate>> placedShips = new ArrayList<>();
 
+
 	public Game(GameSettings gameSettings) {
 		this.gameSettings = gameSettings;
 		this.availableShips = new HashMap<>();
-		setupGame();
+		initializeGame();
 	}
 
 	public Map<ShipType, Integer> getAvailableShips() {
@@ -40,22 +42,24 @@ public class Game {
 	}
 
 	public String getCurrentPlayerName(){
-		//todo get who is current playing so i can pass it to placementScreen to display name or other info
-		return "helo";
+		return currentPlayer.getName();
 	}
 
 
-	private void setupGame(){
+	//*INITIALIZE GAME METHOD
+
+	private void initializeGame(){
 		this.boardSize = gameSettings.getBoardSize();
 		this.shipQuantity = gameSettings.getShipQuantity();
-		initializeGame();
+		initializePlayers();
 		initializeAvailableShips(shipQuantity);
 	}
 
-	private void initializeGame(){
+	private void initializePlayers(){
 
 		players[0] = new Player("PLAYER1", shipQuantity);
 		players[1] = new Player("PLAYER2", shipQuantity);
+		currentPlayer = players[0];
 	}
 
 	private void initializeAvailableShips(int totalShips){
@@ -120,6 +124,16 @@ public class Game {
 		return player.getPlayerShips();
 	}
 
+	private Ship createShip(ShipType shipType){
+		return switch (shipType){
+			case CLOUDRULER -> new CloudRuler();
+			case CONVOYSHEPHER -> new ConvoyShepherd();
+			case ABYSSALASSASIN -> new AbyssalAssassin();
+			case DAUNTLESSDEFENDER -> new DauntlessDefender();
+			case SHELLFIREJUGGERNAUT -> new ShellfireJuggernaut();
+		};
+	}
+
 	public void decrementShipCount(ShipType shipType) {
 		int count = availableShips.get(shipType);
 		if (count > 0) {
@@ -127,18 +141,24 @@ public class Game {
 		}
 	}
 
-	//*BOARD COORDINATES VALIDATION
-	public void validateShipPlacement(){
-		//todo when screen placement starts to be implemented so for each player ship trying to be placed when passed
-		// this means placement screen will receive ship placement and pass it down to game where game will say is or
-		// not valid, to be it cant overlap any ship, cant be diagonal neither out of board boundaries this can be
-		// calculated based in initial coordinate and calculating what directions can ship be placed, right left, up
-		// or down based on size so if coordinate is x then size is x then following coordinates need to be all empty
-		// to have a valid placement
-	}
 
 	public void placeShip(List<Coordinate> shipCoordinates){
 		placedShips.add(shipCoordinates);
 	}
 
+	//*HANDLE PLAYERS TURN FOR PLACEMENT
+	public boolean hasNextPlayer(){
+		return currentPlayerIndex < 1;
+	}
+
+	public void nextPlayer(){
+		currentPlayerIndex++;
+		currentPlayer = players[currentPlayerIndex];
+		//initialize ships for next players since is a new player placing its own ships, so also clear placed ones so
+		// next player will have a whole clear board and not having a clear board states but under the hood having
+		// placed ships full from previous player
+		placedShips.clear();
+		availableShips.clear();
+		initializeAvailableShips(shipQuantity);
+	}
 }
