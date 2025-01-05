@@ -1,5 +1,6 @@
 package src.backend.game;
 
+import src.backend.models.Board;
 import src.backend.models.Player;
 import src.backend.models.Ship;
 import src.backend.ships.*;
@@ -13,13 +14,10 @@ import java.util.Map;
 import java.util.stream.Stream;
 
 public class Game {
-<<<<<<< HEAD
-	private Player[] players = new Player[2];
+
+	private static Player[] players = new Player[2];
 	private Player currentPlayer;
 	private int currentPlayerIndex = 0;
-=======
-	private static Player[] players = new Player[2];
->>>>>>> 24e7bbd (Update Game.java and Turn.java)
 	private final GameSettings gameSettings;
 	private int boardSize;
 	private int shipQuantity;
@@ -152,7 +150,6 @@ public class Game {
 		placedShips.add(shipCoordinates);
 	}
 
-<<<<<<< HEAD
 	//*HANDLE PLAYERS TURN FOR PLACEMENT
 	public boolean hasNextPlayer(){
 		return currentPlayerIndex < 1;
@@ -168,7 +165,4 @@ public class Game {
 		availableShips.clear();
 		initializeAvailableShips(shipQuantity);
 	}
-=======
-
->>>>>>> 24e7bbd (Update Game.java and Turn.java)
 }
