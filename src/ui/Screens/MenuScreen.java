@@ -4,21 +4,15 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
 import src.backend.game.Game;
 import src.backend.game.GameSettings;
-import src.constants.AllConstants;
 import src.enums.BoardSizeOption;
 import src.enums.BoardState;
 import src.enums.PlacementOption;
 import src.enums.ShipQuantityOption;
 import src.ui.UiManager;
 
-import java.net.URL;
-
-import static javafx.scene.paint.Color.ALICEBLUE;
 
 //todo change spacing between gameSettingsContainer containers to fix alignment this
 //todo in css file spacig might not be proper done

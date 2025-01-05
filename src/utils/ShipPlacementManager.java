@@ -1,7 +1,5 @@
 package src.utils;
 
-import src.utils.Coordinate;
-
 import java.util.ArrayList;
 import java.util.List;
 

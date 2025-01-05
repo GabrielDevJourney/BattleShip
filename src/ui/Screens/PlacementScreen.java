@@ -5,7 +5,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
-import javafx.scene.layout.Border;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
@@ -171,6 +170,7 @@ public class PlacementScreen {
 					game.placeShip(placement);  // Add the new ship to the game's placed ships
 					boardView.clearShadows();
 					game.decrementShipCount(selectedShip);
+					checkPlayerPlacementComplete();
 					allPlacements = null;
 					selectedShip = null;
 					return;
@@ -195,5 +195,34 @@ public class PlacementScreen {
 		} else {
 			confirmPlacement(clickedCoordinate);
 		}
+	}
+
+	//*HANDLE NEXT PLAYER PLACEMENT
+	private void checkPlayerPlacementComplete() {
+		//to be able to confirm if is time for next player to do placement i must check if the values of ships this
+		// means amount of each available ships has reach zero meaning player has finish all his ships placement, so
+		// if there is a next player then reset screen and allow next player to do his placement then cuz only exsit
+		// 2 player will fallback to swtiching screen and battle will start based on the 2 boards previous setup
+		if (game.getAvailableShips()
+				.values()
+				.stream()
+				.allMatch(count -> count == 0)) {
+			if (game.hasNextPlayer()) {
+				game.nextPlayer();//behaves like an iterator
+				resetPlacementScreen();
+			} else {
+				uiManager.switchToBattle();
+			}
+		}
+	}
+
+	private void resetPlacementScreen(){
+		boardView.clearBoard();
+		updatePlayerName();
+	}
+
+	private void updatePlayerName(){
+		Text playerName = (Text) playerNameContainer.getChildren().get(0);
+		playerName.setText(game.getCurrentPlayerName());
 	}
 }
