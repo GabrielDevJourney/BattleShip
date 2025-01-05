@@ -13,14 +13,20 @@ import java.util.Map;
 import java.util.stream.Stream;
 
 public class Game {
+<<<<<<< HEAD
 	private Player[] players = new Player[2];
 	private Player currentPlayer;
 	private int currentPlayerIndex = 0;
+=======
+	private static Player[] players = new Player[2];
+>>>>>>> 24e7bbd (Update Game.java and Turn.java)
 	private final GameSettings gameSettings;
 	private int boardSize;
 	private int shipQuantity;
 	private Map<ShipType,Integer> availableShips;
 	private List<List<Coordinate>> placedShips = new ArrayList<>();
+	private Board player1Board;
+	private Board player2Board;
 
 
 	public Game(GameSettings gameSettings) {
@@ -45,6 +51,9 @@ public class Game {
 		return currentPlayer.getName();
 	}
 
+	public static Player[] getPlayers() {
+		return players;
+	}
 
 	//*INITIALIZE GAME METHOD
 
@@ -120,9 +129,6 @@ public class Game {
 		return player.checkHasLost();
 	}
 
-	public ArrayList<Ship> getPlayerShips(Player player) {
-		return player.getPlayerShips();
-	}
 
 	private Ship createShip(ShipType shipType){
 		return switch (shipType){
@@ -146,6 +152,7 @@ public class Game {
 		placedShips.add(shipCoordinates);
 	}
 
+<<<<<<< HEAD
 	//*HANDLE PLAYERS TURN FOR PLACEMENT
 	public boolean hasNextPlayer(){
 		return currentPlayerIndex < 1;
@@ -161,4 +168,7 @@ public class Game {
 		availableShips.clear();
 		initializeAvailableShips(shipQuantity);
 	}
+=======
+
+>>>>>>> 24e7bbd (Update Game.java and Turn.java)
 }
