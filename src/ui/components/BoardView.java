@@ -3,6 +3,7 @@ package src.ui.components;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import src.enums.BoardState;
+import src.logic.models.Board;
 import src.utils.Coordinate;
 
 import java.util.Arrays;
@@ -67,6 +68,30 @@ public class BoardView extends GridPane {
 
 	public void setOnCellClicked(Consumer<Coordinate> onCellClicked) {
 		this.onCellClicked = onCellClicked;
+	}
+
+	public void updateBoardForBattle(Board board) {
+		for (int row = 0; row < boardSize; row++) {
+			for (int col = 0; col < boardSize; col++) {
+				BoardState state = board.getCellState(row, col);
+				// During battle, only show WATER, HIT, MISS, or SUNK states
+				// Never show SHIP state
+				if (state == BoardState.SHIP) {
+					cells[row][col].setText(BoardState.WATER.getBoardState());
+				} else {
+					cells[row][col].setText(state.getBoardState());
+				}
+			}
+		}
+	}
+
+	public void updateBoardForPlacement(Board board) {
+		for (int row = 0; row < boardSize; row++) {
+			for (int col = 0; col < boardSize; col++) {
+				BoardState state = board.getCellState(row, col);
+				cells[row][col].setText(state.getBoardState());
+			}
+		}
 	}
 
 	//*HANDLE PLAYER PLACEMENT RESET

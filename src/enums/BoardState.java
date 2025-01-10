@@ -2,10 +2,11 @@ package src.enums;
 
 public enum BoardState {
 	WATER("🌊"),//🌊
-	MISS("💨"),//💨
+	MISS("\uD83D\uDCA9"),//💩
 	HIT("🎯"),//🎯
-	SUNK("☠\uFE0F"),//☠️
-	SHIP("🚢");//🚢
+	SUNK("\uD83E\uDEE0"),//🫠
+	SHIP("🚢"),//🚢
+	SHIPFUND("🔍");
 
 	private final String boardState;
 

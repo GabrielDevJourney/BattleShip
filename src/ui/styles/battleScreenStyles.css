@@ -1,0 +1,35 @@
+.root {
+    -fx-font-family: "JetBrains Mono";
+}
+
+.grid-cell {
+   -fx-border-color: black;
+   -fx-border-width: 1px;
+   -fx-min-width: 35px;
+   -fx-min-height: 35px;
+   -fx-alignment: center;
+   -fx-font-size: 25px;
+}
+
+.board-container {
+    -fx-padding: 20px;
+}
+
+.cards-container {
+    -fx-padding: 20px;
+}
+
+.simple-text {
+    -fx-font-size: 16px;
+}
+
+.title-text {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+}
+
+.button {
+    -fx-font-size: 16px;
+    -fx-min-width: 120px;
+    -fx-min-height: 40px;
+}

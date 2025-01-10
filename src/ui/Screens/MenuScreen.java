@@ -5,8 +5,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
-import src.backend.game.Game;
-import src.backend.game.GameSettings;
+import src.logic.game.Game;
+import src.logic.game.GameSettings;
 import src.enums.BoardSizeOption;
 import src.enums.BoardState;
 import src.enums.PlacementOption;
@@ -14,135 +14,101 @@ import src.enums.ShipQuantityOption;
 import src.ui.UiManager;
 
 
-//todo change spacing between gameSettingsContainer containers to fix alignment this
-//todo in css file spacig might not be proper done
-
 
 public class MenuScreen {
 	private final UiManager uiManager;
 	private Scene menuScene;
-	private VBox mainLayout;
 
-	// Game Settings Containers
+	// Layout containers
+	private VBox mainLayout;
 	private VBox gameSettingsVBox;
 	private HBox gameSettingsContainer;
+	private GridPane gameInfoContainer;
+	private VBox gameInfoVbox;
+	private HBox bottomButtonsContainer;
+
+	// Settings containers
 	private VBox boardSizeContainer;
 	private VBox shipQuantityContainer;
 	private VBox placementTypeContainer;
 
-	// Game Settings Controls
-	private ComboBox<BoardSizeOption> boardSizeComboBox;
-	private ComboBox<ShipQuantityOption> shipQuantityComboBox;
-	private ComboBox<PlacementOption> placementComboBox;
-
-	// Game Info Containers
-	private VBox gameInfoVbox;
-
-	private GridPane gameInfoContainer;
+	// Info containers
 	private VBox shipsInfoContainer;
 	private VBox cardsInfoContainer;
 	private VBox symbolsInfoContainer;
 	private VBox controlsInfoContainer;
 
-	private Text shipsTitleText;
-	private Text cloudRulerText;
-	private Text convoyShepherdText;
-	private Text abyssalAssassinText;
-	private Text dauntlessDefenderText;
-	private Text shellfireJuggernautText;
+	// Settings controls
+	private ComboBox<BoardSizeOption> boardSizeComboBox;
+	private ComboBox<ShipQuantityOption> shipQuantityComboBox;
+	private ComboBox<PlacementOption> placementComboBox;
 
-	private Text cardsTitleText;
-	private Text crossStrikeText;
-	private Text quadShotText;
-	private Text skipTurnText;
-	private Text sonarPulseText;
-
-	private Text gameSymbolsTitleText;
-	private Text waterText;
-	private Text hitText;
-	private Text missText;
-	private Text sunkText;
-	private Text shipText;
-
-	private Text controlsTitleText;
-	private Text navigateText;
-	private Text selectAndFireText;
-	private Text rotateShipText;
-	private Text useCardsText;
-	private Text menuText;
-
-
-	// Bottom Buttons Container
-	private HBox bottomButtonsContainer;
-
-	//For final game settings
-	BoardSizeOption boardSizeOption;
-	ShipQuantityOption shipQuantityOption;
-	PlacementOption placementOption;
+	// Settings state
+	private BoardSizeOption boardSizeOption;
+	private ShipQuantityOption shipQuantityOption;
+	private PlacementOption placementOption;
 
 	public MenuScreen(UiManager uiManager) {
 		this.uiManager = uiManager;
-
-		//default settings if player just starts game without changing any thing
-		boardSizeOption = BoardSizeOption.SIZE_10;
-		shipQuantityOption = ShipQuantityOption.SHIPS_10;
-		placementOption = PlacementOption.MANUAL;
-
-		createMenuScreenScene();
+		initializeDefaultSettings();
+		createMenuScreen();
 	}
 
 	public Scene getScene() {
 		return menuScene;
 	}
 
-	private void createMenuScreenScene() {
+
+	private void initializeDefaultSettings() {
+		boardSizeOption = BoardSizeOption.SIZE_10;
+		shipQuantityOption = ShipQuantityOption.SHIPS_10;
+		placementOption = PlacementOption.MANUAL;
+	}
+
+	private void createMenuScreen() {
 		mainLayout = new VBox(20);
 		mainLayout.setStyle("-fx-padding: 15;");
 		mainLayout.setAlignment(Pos.TOP_CENTER);
 
-		menuScene = new Scene(mainLayout);
-
-		String cssPath = "file:///Users/mindera/Documents/mindera/BattleShip/src/ui/styles/menuScreenStyles.css";
-		try {
-			menuScene.getStylesheets().add(cssPath);
-			System.out.println("CSS file loaded successfully");
-		} catch (Exception e) {
-			System.err.println("Failed to load CSS file: " + cssPath);
-			e.printStackTrace();
-		}
-
-
-		createGameSettingsMainContainer();
-		createGameInfoMainContainer();
-		createBottomBtnsMainContainer();
-		setupEventHandlers();
-		testLayout();
+		createGameSettingsContainer();
+		createGameInfoContainer();
+		createBottomButtonsContainer();
 
 		mainLayout.getChildren().addAll(
 				gameSettingsVBox,
 				gameInfoVbox,
 				bottomButtonsContainer
 		);
+
+		menuScene = new Scene(mainLayout);
+		loadStylesheet();
+		setupEventHandlers();
 	}
 
-	//* GAME SETTINGS
+	private void loadStylesheet() {
+		String cssPath = "file:///Users/mindera/Documents/minderaSchool/BattleShip/src/ui/styles/menuScreenStyles.css";
+		try {
+			menuScene.getStylesheets().add(cssPath);
+		} catch (Exception e) {
+			System.err.println("Failed to load CSS file: " + cssPath);
+			e.printStackTrace();
+		}
+	}
 
-	private void createGameSettingsMainContainer() {
-		gameSettingsVBox = new VBox(10); // Create VBox with spacing
+	private void createGameSettingsContainer() {
+		gameSettingsVBox = new VBox(10);
 		gameSettingsVBox.setAlignment(Pos.TOP_CENTER);
 
-		Text gameSettingsTitle = new Text("GAME SETTINGS");
-		gameSettingsTitle.getStyleClass().add("game-settings-title-text");
+		Text title = new Text("GAME SETTINGS");
+		title.getStyleClass().add("game-settings-title-text");
 
-		// Create HBox for game settings
 		gameSettingsContainer = new HBox();
-
 		gameSettingsContainer.setAlignment(Pos.CENTER);
 		gameSettingsContainer.getStyleClass().add("game-settings-containers");
 
-		createBoardSizeSettingContainer();
-		createShipQuantitySettingContainer();
-		createPlacementTypeSettingContainer();
+		createBoardSizeContainer();
+		createShipQuantityContainer();
+		createPlacementTypeContainer();
 
 		gameSettingsContainer.getChildren().addAll(
 				boardSizeContainer,
@@ -150,226 +116,177 @@ public class MenuScreen {
 				placementTypeContainer
 		);
 
-		// Add title and HBox to VBox
-		gameSettingsVBox.getChildren().addAll(gameSettingsTitle, gameSettingsContainer);
+		gameSettingsVBox.getChildren().addAll(title, gameSettingsContainer);
 	}
 
-	private void createBoardSizeSettingContainer() {
+	private void createBoardSizeContainer() {
 		boardSizeContainer = new VBox();
-
 		boardSizeContainer.setAlignment(Pos.CENTER);
 		boardSizeContainer.getStyleClass().add("game-settings-containers");
 
-		Text boardSizeTitle = new Text("BOARD SIZE");
-		boardSizeTitle.getStyleClass().add("title-text");
+		Text title = new Text("BOARD SIZE");
+		title.getStyleClass().add("title-text");
 
 		boardSizeComboBox = new ComboBox<>();
 		boardSizeComboBox.getItems().addAll(BoardSizeOption.values());
 		boardSizeComboBox.setValue(BoardSizeOption.SIZE_10);
 		boardSizeComboBox.getStyleClass().add("option-text");
 
-		boardSizeContainer.getChildren().addAll(
-				boardSizeTitle,
-				boardSizeComboBox
-		);
+		boardSizeContainer.getChildren().addAll(title, boardSizeComboBox);
 	}
 
-	private void createShipQuantitySettingContainer() {
+	private void createShipQuantityContainer() {
 		shipQuantityContainer = new VBox();
-
 		shipQuantityContainer.setAlignment(Pos.CENTER);
 		shipQuantityContainer.getStyleClass().add("game-settings-containers");
 
-		Text shipQuantityTitle = new Text("SHIPS QUANTITY");
-		shipQuantityTitle.getStyleClass().add("title-text");
+		Text title = new Text("SHIPS QUANTITY");
+		title.getStyleClass().add("title-text");
 
 		shipQuantityComboBox = new ComboBox<>();
 		shipQuantityComboBox.getItems().addAll(ShipQuantityOption.values());
 		shipQuantityComboBox.setValue(ShipQuantityOption.SHIPS_10);
 
-		shipQuantityContainer.getChildren().addAll(
-				shipQuantityTitle,
-				shipQuantityComboBox
-		);
+		shipQuantityContainer.getChildren().addAll(title, shipQuantityComboBox);
 	}
 
-	private void createPlacementTypeSettingContainer() {
+	private void createPlacementTypeContainer() {
 		placementTypeContainer = new VBox();
-
 		placementTypeContainer.setAlignment(Pos.CENTER);
 		placementTypeContainer.getStyleClass().add("game-settings-containers");
 
-		Text placementTitle = new Text("PLACEMENT TYPE");
-		placementTitle.getStyleClass().add("title-text");
+		Text title = new Text("PLACEMENT TYPE");
+		title.getStyleClass().add("title-text");
 
 		placementComboBox = new ComboBox<>();
 		placementComboBox.getItems().addAll(PlacementOption.values());
 		placementComboBox.setValue(PlacementOption.MANUAL);
 
-		placementTypeContainer.getChildren().addAll(
-				placementTitle,
-				placementComboBox
-		);
+		placementTypeContainer.getChildren().addAll(title, placementComboBox);
 	}
 
-	//* GAME INFO
-	private void createGameInfoMainContainer() {
+	private void createGameInfoContainer() {
 		gameInfoVbox = new VBox(10);
 		gameInfoVbox.setAlignment(Pos.TOP_CENTER);
 		gameInfoVbox.getStyleClass().add("game-info-box");
 
-		Text gameInfoTitle = new Text("GAME INFO");
-		gameInfoTitle.getStyleClass().add("game-settings-title-text");
+		Text title = new Text("GAME INFO");
+		title.getStyleClass().add("game-settings-title-text");
 
 		gameInfoContainer = new GridPane();
 		gameInfoContainer.setHgap(20);
 		gameInfoContainer.setVgap(20);
 		gameInfoContainer.getStyleClass().add("game-info-grid-container");
 
-
 		createShipsInfoContainer();
 		createCardsInfoContainer();
-		createGameSymbolsInfoContainer();
+		createSymbolsInfoContainer();
 		createControlsInfoContainer();
 
-		//grid pane placement (obj, col,row)
-		gameInfoContainer.add(shipsInfoContainer,1,0);
-		gameInfoContainer.add(cardsInfoContainer,2,0);
-		gameInfoContainer.add(symbolsInfoContainer,1,1);
-		gameInfoContainer.add(controlsInfoContainer,2,1);
+		gameInfoContainer.add(shipsInfoContainer, 1, 0);
+		gameInfoContainer.add(cardsInfoContainer, 2, 0);
+		gameInfoContainer.add(symbolsInfoContainer, 1, 1);
+		gameInfoContainer.add(controlsInfoContainer, 2, 1);
 
-		gameInfoVbox.getChildren().addAll(
-				gameInfoTitle,
-				gameInfoContainer
-		);
-
+		gameInfoVbox.getChildren().addAll(title, gameInfoContainer);
 	}
 
 	private void createShipsInfoContainer() {
 		shipsInfoContainer = new VBox();
-
 		shipsInfoContainer.setAlignment(Pos.TOP_CENTER);
 		shipsInfoContainer.getStyleClass().add("game-info-containers");
 
-		shipsTitleText = new Text("SHIPS");
-		shipsTitleText.getStyleClass().add("title-text");
+		Text title = new Text("SHIPS");
+		title.getStyleClass().add("title-text");
 
-		cloudRulerText = new Text("Cloud Ruler (Size 5)");
-		convoyShepherdText = new Text("Convoy Shepherd (Size 4)");
-		abyssalAssassinText = new Text("Abyssal Assassin (Size 3)");
-		dauntlessDefenderText = new Text("Dauntless Defender (Size 3)");
-		shellfireJuggernautText = new Text("Shellfire Juggernaut (Size 2)");
+		Text cloudRuler = new Text("Cloud Ruler (Size 5)");
+		Text convoyShepherd = new Text("Convoy Shepherd (Size 4)");
+		Text abyssalAssassin = new Text("Abyssal Assassin (Size 3)");
+		Text dauntlessDefender = new Text("Dauntless Defender (Size 3)");
+		Text shellfireJuggernaut = new Text("Shellfire Juggernaut (Size 2)");
 
-		cloudRulerText.getStyleClass().add("simple-text");
-		convoyShepherdText.getStyleClass().add("simple-text");
-		abyssalAssassinText.getStyleClass().add("simple-text");
-		dauntlessDefenderText.getStyleClass().add("simple-text");
-		shellfireJuggernautText.getStyleClass().add("simple-text");
+		cloudRuler.getStyleClass().add("simple-text");
+		convoyShepherd.getStyleClass().add("simple-text");
+		abyssalAssassin.getStyleClass().add("simple-text");
+		dauntlessDefender.getStyleClass().add("simple-text");
+		shellfireJuggernaut.getStyleClass().add("simple-text");
 
 		shipsInfoContainer.getChildren().addAll(
-				shipsTitleText,
-				cloudRulerText,
-				convoyShepherdText,
-				abyssalAssassinText,
-				dauntlessDefenderText,
-				shellfireJuggernautText
+				title, cloudRuler, convoyShepherd,
+				abyssalAssassin, dauntlessDefender, shellfireJuggernaut
 		);
 	}
 
 	private void createCardsInfoContainer() {
 		cardsInfoContainer = new VBox();
-
 		cardsInfoContainer.setAlignment(Pos.TOP_CENTER);
 		cardsInfoContainer.getStyleClass().add("game-info-containers");
 
-		cardsTitleText = new Text("CARDS");
-		cardsTitleText.getStyleClass().add("title-text");
+		Text title = new Text("CARDS");
+		title.getStyleClass().add("title-text");
 
-		crossStrikeText = new Text("Cross Strike (2x2 area shot)");
-		quadShotText = new Text("Quad Shot (4 random shots)");
-		sonarPulseText = new Text("Sonar Pulse (3x3 area ships info)");
-		skipTurnText = new Text("Skip Turn (enemy next turn skip)");
+		Text crossStrike = new Text("Cross Strike (2x2 area shot)");
+		Text quadShot = new Text("Quad Shot (4 random shots)");
+		Text sonarPulse = new Text("Sonar Pulse (3x3 area ships info)");
+		Text skipTurn = new Text("Skip Turn (enemy next turn skip)");
 
-		crossStrikeText.getStyleClass().add("simple-text");
-		quadShotText.getStyleClass().add("simple-text");
-		sonarPulseText.getStyleClass().add("simple-text");
-		skipTurnText.getStyleClass().add("simple-text");
+		crossStrike.getStyleClass().add("simple-text");
+		quadShot.getStyleClass().add("simple-text");
+		sonarPulse.getStyleClass().add("simple-text");
+		skipTurn.getStyleClass().add("simple-text");
 
 		cardsInfoContainer.getChildren().addAll(
-				cardsTitleText,
-				crossStrikeText,
-				quadShotText,
-				sonarPulseText,
-				skipTurnText
+				title, crossStrike, quadShot, sonarPulse, skipTurn
 		);
 	}
 
-	private void createGameSymbolsInfoContainer() {
+	private void createSymbolsInfoContainer() {
 		symbolsInfoContainer = new VBox();
-
 		symbolsInfoContainer.setAlignment(Pos.TOP_CENTER);
 		symbolsInfoContainer.getStyleClass().add("game-info-containers");
 
+		Text title = new Text("GAME SYMBOLS");
+		title.getStyleClass().add("title-text");
 
-		gameSymbolsTitleText = new Text("GAME SYMBOLS");
-		gameSymbolsTitleText.getStyleClass().add("title-text");
+		Text water = new Text("Water - " + BoardState.WATER.getBoardState());
+		Text miss = new Text("Miss - " + BoardState.MISS.getBoardState());
+		Text hit = new Text("Hit - " + BoardState.HIT.getBoardState());
+		Text sunk = new Text("Sunk - " + BoardState.SUNK.getBoardState());
+		Text ship = new Text("Ship - " + BoardState.SHIP.getBoardState());
 
-		waterText = new Text("Water - " + BoardState.WATER.getBoardState());
-		missText = new Text("Miss - " + BoardState.MISS.getBoardState());
-		hitText = new Text("Hit - " + BoardState.HIT.getBoardState());
-		sunkText = new Text("Sunk - " + BoardState.SUNK.getBoardState());
-		shipText = new Text("Ship - " + BoardState.SHIP.getBoardState());
-
-		waterText.getStyleClass().add("simple-text");
-		missText.getStyleClass().add("simple-text");
-		hitText.getStyleClass().add("simple-text");
-		sunkText.getStyleClass().add("simple-text");
-		shipText.getStyleClass().add("simple-text");
+		water.getStyleClass().add("simple-text");
+		miss.getStyleClass().add("simple-text");
+		hit.getStyleClass().add("simple-text");
+		sunk.getStyleClass().add("simple-text");
+		ship.getStyleClass().add("simple-text");
 
 		symbolsInfoContainer.getChildren().addAll(
-				gameSymbolsTitleText,
-				waterText,
-				missText,
-				hitText,
-				sunkText,
-				shipText
+				title, water, miss, hit, sunk, ship
 		);
 	}
 
 	private void createControlsInfoContainer() {
 		controlsInfoContainer = new VBox();
-
 		controlsInfoContainer.setAlignment(Pos.TOP_CENTER);
 		controlsInfoContainer.getStyleClass().add("game-info-containers");
 
-		controlsTitleText = new Text("CONTROLS");
-		controlsTitleText.getStyleClass().add("title-text");
+		Text title = new Text("CONTROLS");
+		title.getStyleClass().add("title-text");
 
-		navigateText = new Text("Navigate - ↑↓←→");
-		selectAndFireText = new Text("Select/Fire - ENTER");
-		rotateShipText = new Text("Rotate Ship - R");
-		useCardsText = new Text("Use Cards - 1-4");
-		menuText = new Text("Menu/Exit - ESC");
+		Text useCards = new Text("Use Cards - Buttons of each card");
+		Text mouseInteractiveGameText = new Text("To interact use mouse");
 
-		navigateText.getStyleClass().add("simple-text");
-		selectAndFireText.getStyleClass().add("simple-text");
-		rotateShipText.getStyleClass().add("simple-text");
-		useCardsText.getStyleClass().add("simple-text");
-		menuText.getStyleClass().add("simple-text");
+		useCards.getStyleClass().add("simple-text");
+		mouseInteractiveGameText.getStyleClass().add("simple-text");
 
 		controlsInfoContainer.getChildren().addAll(
-				controlsTitleText,
-				navigateText,
-				selectAndFireText,
-				rotateShipText,
-				useCardsText,
-				menuText
+				title,
+				useCards,
+				mouseInteractiveGameText
 		);
 	}
 
-
-	//*BOTTOM BTNS
-	private void createBottomBtnsMainContainer() {
+	private void createBottomButtonsContainer() {
 		bottomButtonsContainer = new HBox(20);
 		bottomButtonsContainer.setAlignment(Pos.CENTER);
 		bottomButtonsContainer.getStyleClass().add("bottom-buttons-container");
@@ -385,21 +302,13 @@ public class MenuScreen {
 		bottomButtonsContainer.getChildren().addAll(startGameButton, exitButton);
 	}
 
-
-	//*HANDLE MOUSE EVENTS AND SETTINGS PROPAGATION TO OTHER CLASSES
-
 	private void setupEventHandlers() {
-		boardSizeComboBox.setOnAction(e -> updateSettings());
-		shipQuantityComboBox.setOnAction(e -> updateSettings());
-		placementComboBox.setOnAction(e -> updateSettings());
+		boardSizeComboBox.setOnAction(event -> updateSettings());
+		shipQuantityComboBox.setOnAction(event -> updateSettings());
+		placementComboBox.setOnAction(event -> updateSettings());
 	}
 
 	private void updateSettings() {
-		System.out.println("Current Settings:");
-		System.out.println("Board Size: " + boardSizeComboBox.getValue());
-		System.out.println("Ship Quantity: " + shipQuantityComboBox.getValue());
-		System.out.println("Placement Type: " + placementComboBox.getValue());
-
 		boardSizeOption = boardSizeComboBox.getValue();
 		shipQuantityOption = shipQuantityComboBox.getValue();
 		placementOption = placementComboBox.getValue();
@@ -407,32 +316,12 @@ public class MenuScreen {
 
 	private void startGame() {
 		updateSettings();
-
-		// For now, we'll just print the final selections
-		System.out.println("Starting game with:");
-		System.out.println("Board Size: " + boardSizeComboBox.getValue());
-		System.out.println("Ship Quantity: " + shipQuantityComboBox.getValue());
-		System.out.println("Placement Type: " + placementComboBox.getValue());
-
-		// method to pass above final player decision of game settings create proper method in game
-		//todo still need to handle the click action itself
-		GameSettings gameSettings = new GameSettings(boardSizeOption, shipQuantityOption, placementOption);
+		GameSettings gameSettings = new GameSettings(
+				boardSizeOption,
+				shipQuantityOption,
+				placementOption
+		);
 		Game game = new Game(gameSettings);
 		uiManager.startPlacement(game);
 	}
-
-
-	//*STYLIG TESTING
-	//!this stying is being used need to apply it properly after
-	private void testLayout() {
-		shipsInfoContainer.setStyle("-fx-border-color: green; -fx-border-width: 2px; -fx-border-style: solid;" +
-				"-fx-border-radius: 10px;");
-		cardsInfoContainer.setStyle("-fx-border-color: green; -fx-border-width: 2px; -fx-border-style: solid;" +
-				"-fx-border-radius: 10px;");
-		symbolsInfoContainer.setStyle("-fx-border-color: green; -fx-border-width: 2px; -fx-border-style: solid;" +
-				"-fx-border-radius: 10px;");
-		controlsInfoContainer.setStyle("-fx-border-color: green; -fx-border-width: 2px; -fx-border-style: solid;" +
-				"-fx-border-radius: 10px;");
-	}
-
 }

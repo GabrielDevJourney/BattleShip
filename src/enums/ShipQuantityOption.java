@@ -2,8 +2,7 @@ package src.enums;
 
 public enum ShipQuantityOption {
 	SHIPS_10(10),
-	SHIPS_15(15),
-	SHIPS_20(20);
+	SHIPS_15(15);
 
 	private final int shipQuantity;
 

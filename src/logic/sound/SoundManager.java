@@ -1,4 +1,4 @@
-package src.backend.sound;
+package src.logic.sound;
 
 public class SoundManager {
 }

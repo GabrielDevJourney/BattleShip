@@ -1,4 +1,6 @@
 package src.ui.components;
 
-public class BattleLogView {
+import javafx.scene.layout.VBox;
+
+public class BattleLogView extends VBox {
 }
