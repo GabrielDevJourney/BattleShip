@@ -23,9 +23,9 @@ public class CrossStrike extends Card {
 
 		for (int row = centerRow; row <= centerRow + 1; row++) {
 			for (int col = centerCol; col <= centerCol + 1; col++) {
-				Coordinate coord = new Coordinate(row, col);
-				if (isValidCoordinate(defenderBoard, coord)) {
-					game.executeAttack(coord);  // Use game's attack logic
+				Coordinate coordinate = new Coordinate(row, col);
+				if (isValidCoordinate(defenderBoard, coordinate)) {
+					game.executeAttack(coordinate);  // Use game's attack logic
 					canHit = true;
 				}
 			}
@@ -34,9 +34,9 @@ public class CrossStrike extends Card {
 		return canHit;
 	}
 
-	private boolean isValidCoordinate(Board board, Coordinate coord) {
+	private boolean isValidCoordinate(Board board, Coordinate coordinate) {
 		int size = board.getSize();
-		return coord.getRow() >= 0 && coord.getRow() < size &&
-				coord.getCol() >= 0 && coord.getCol() < size;
+		return coordinate.getRow() >= 0 && coordinate.getRow() < size &&
+				coordinate.getCol() >= 0 && coordinate.getCol() < size;
 	}
 }

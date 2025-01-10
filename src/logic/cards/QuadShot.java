@@ -31,9 +31,9 @@ public class QuadShot extends Card {
 		List<Coordinate> targets = new ArrayList<>();
 		for (int row = 0; row < board.getSize(); row++) {
 			for (int col = 0; col < board.getSize(); col++) {
-				Coordinate coord = new Coordinate(row, col);
+				Coordinate coordinate = new Coordinate(row, col);
 				if (board.getCellState(row, col) == BoardState.WATER) {
-					targets.add(coord);
+					targets.add(coordinate);
 				}
 			}
 		}
