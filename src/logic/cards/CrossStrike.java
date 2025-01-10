@@ -1,13 +1,12 @@
-package src.backend.cards;
+package src.logic.cards;
 
-import src.backend.game.Turn;
-import src.backend.models.Board;
-import src.backend.models.Card;
+import src.logic.game.Game;
+import src.logic.models.Board;
+import src.logic.models.Card;
 import static src.enums.CardType.CROSS_STRIKE;
-import src.utils.Coordinate;
 
-import java.util.ArrayList;
-import java.util.List;
+import src.logic.models.Player;
+import src.utils.Coordinate;
 
 
 public class CrossStrike extends Card {
@@ -16,31 +15,28 @@ public class CrossStrike extends Card {
 	}
 
 	@Override
-	public void executeCard(Turn currentTurn, Coordinate coordinateCenter) {
-		int coordinateCenterRow = coordinateCenter.getRow();
-		int coordinateCenterCol = coordinateCenter.getCol();
-		Board defenderBoard = currentTurn.getDefenderBoard();
+	public boolean executeCard(Game game, Player attacker, Player defender, Coordinate center) {
+		Board defenderBoard = defender.getBoard();
+		int centerRow = center.getRow();
+		int centerCol = center.getCol();
+		boolean canHit = false;
 
-		List<Coordinate> coordinatesToAttack = new ArrayList<>();
-		for (int row = coordinateCenterRow; row <= coordinateCenterRow + 1; row++) {
-			//and previous col until next col
-			for (int col = coordinateCenterCol; col <= coordinateCenterCol + 1; col++) {
-				//create each coordiante that belong to 2x2 area
-				Coordinate coordinate = new Coordinate(row, col);
-				if (isValidCoordinate(defenderBoard, coordinate) && defenderBoard.isTargetable(coordinate)) {
-					coordinatesToAttack.add(coordinate);
+		for (int row = centerRow; row <= centerRow + 1; row++) {
+			for (int col = centerCol; col <= centerCol + 1; col++) {
+				Coordinate coord = new Coordinate(row, col);
+				if (isValidCoordinate(defenderBoard, coord)) {
+					game.executeAttack(coord);  // Use game's attack logic
+					canHit = true;
 				}
 			}
 		}
 
-		for (Coordinate coordinate : coordinatesToAttack) {
-			currentTurn.attack(defenderBoard, coordinate);
-		}
+		return canHit;
 	}
 
-	private boolean isValidCoordinate(Board board, Coordinate coordinate) {
-		int size = board.getBoardSize();
-		return coordinate.getRow() >= 0 && coordinate.getRow() < size &&
-				coordinate.getCol() >= 0 && coordinate.getCol() < size;
+	private boolean isValidCoordinate(Board board, Coordinate coord) {
+		int size = board.getSize();
+		return coord.getRow() >= 0 && coord.getRow() < size &&
+				coord.getCol() >= 0 && coord.getCol() < size;
 	}
 }

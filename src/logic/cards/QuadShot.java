@@ -1,16 +1,17 @@
-package src.backend.cards;
-import src.backend.game.Turn;
-import src.backend.models.Board;
-import src.backend.models.Card;
+package src.logic.cards;
+import src.enums.BoardState;
+import src.logic.game.Game;
+import src.logic.models.Board;
+import src.logic.models.Card;
 
 import static src.enums.CardType.QUAD_SHOT;
 
+import src.logic.models.Player;
 import src.utils.Coordinate;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Random;
 
 public class QuadShot extends Card {
 	private static final int NUMBER_OF_SHOTS = 4;
@@ -20,39 +21,35 @@ public class QuadShot extends Card {
 	}
 
 	@Override
-	public void executeCard(Turn currentTurn, Coordinate coordinateCenter) {
-		Board defenderBoard = currentTurn.getDefenderBoard();
-		List<Coordinate> availableCoordinates = getAvailableCoordinates(defenderBoard);
-		executeRandomAttacks(currentTurn, defenderBoard, availableCoordinates);
+	public boolean executeCard(Game game, Player attacker, Player defender, Coordinate center) {
+		Board defenderBoard = defender.getBoard();
+		List<Coordinate> validTargets = getValidTargets(defenderBoard);
+		return executeRandomAttacks(game, validTargets);
 	}
 
-	private List<Coordinate> getAvailableCoordinates(Board defenderBoard) {
-		List<Coordinate> availableCoordinates = new ArrayList<>();
-		int boardSize = defenderBoard.getBoardSize();
-
-		for (int row = 0; row < boardSize; row++) {
-			for (int col = 0; col < boardSize; col++) {
-				Coordinate coordinate = new Coordinate(row, col);
-				if (defenderBoard.isTargetable(coordinate)) {
-					availableCoordinates.add(coordinate);
+	private List<Coordinate> getValidTargets(Board board) {
+		List<Coordinate> targets = new ArrayList<>();
+		for (int row = 0; row < board.getSize(); row++) {
+			for (int col = 0; col < board.getSize(); col++) {
+				Coordinate coord = new Coordinate(row, col);
+				if (board.getCellState(row, col) == BoardState.WATER) {
+					targets.add(coord);
 				}
 			}
 		}
-		return availableCoordinates;
+		return targets;
 	}
 
-	private void executeRandomAttacks(Turn currentTurn, Board defenderBoard, List<Coordinate> availableCoordinates) {
-		//give 4 first coordiantes and then can check if they are 1 cell apart from hitted
-		Collections.shuffle(availableCoordinates);
-		Random random = new Random();
-		//if there aren't enough coordinate to shoot at this means if we do 4 random shoots and only 2 avaible then
-		// will be only shooting those 2 available
-		int shotsToExecute = Math.min(NUMBER_OF_SHOTS, availableCoordinates.size());
-		for (int i = 0; i < shotsToExecute; i++) {
-			int index = random.nextInt(availableCoordinates.size());
-			//remove coordinate so next iteration doesnt have it
-			Coordinate target = availableCoordinates.remove(index);
-			currentTurn.attack(defenderBoard, target);
+	private boolean executeRandomAttacks(Game game, List<Coordinate> validTargets) {
+		Collections.shuffle(validTargets);
+		int shots = Math.min(NUMBER_OF_SHOTS, validTargets.size());
+		boolean canHit = false;
+
+		for (int i = 0; i < shots; i++) {
+			game.executeAttack(validTargets.get(i));
+			canHit = true;
 		}
+
+		return canHit;
 	}
 }

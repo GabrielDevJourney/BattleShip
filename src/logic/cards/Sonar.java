@@ -1,12 +1,13 @@
-package src.backend.cards;
+package src.logic.cards;
 
-import src.backend.game.Turn;
-import src.backend.models.Board;
-import src.backend.models.Card;
+import src.logic.game.Game;
+import src.logic.models.Board;
+import src.logic.models.Card;
 
 import static src.enums.CardType.SONAR;
 
-import src.backend.models.Ship;
+import src.logic.models.Player;
+import src.logic.models.Ship;
 import src.enums.BoardState;
 import src.utils.Coordinate;
 
@@ -18,49 +19,49 @@ public class Sonar extends Card {
 		super(SONAR);
 	}
 
-	private List<Coordinate> getSonarArea(Coordinate center, Board defenderBoard) {
-		List<Coordinate> sonarArea = new ArrayList<>();
-		int coordinateCenterRow = center.getRow();
-		int coordinateCenterCol = center.getCol();
-
-		// for center coordiante previous row until next row
-		for (int row = coordinateCenterRow - 1; row <= coordinateCenterRow + 1; row++) {
-			//and previous col until next col
-			for (int col = coordinateCenterCol - 1; col <= coordinateCenterCol + 1; col++) {
-				//create each coordiante that belong to 3x3 area
-				Coordinate coordinate = new Coordinate(row, col);
-
-				if (isValidCoordinate(defenderBoard, coordinate)) {
-					sonarArea.add(coordinate);
-				}
-			}
-		}
-		return sonarArea;
-	}
-
 	@Override
-	public void executeCard(Turn currentTurn, Coordinate coordinateCenter) {
-		Board defenderBoard = currentTurn.getDefenderBoard();
+	public boolean executeCard(Game game, Player attacker, Player defender, Coordinate center) {
+		Board defenderBoard = defender.getBoard();
 
-		if (isValidCoordinate(defenderBoard, coordinateCenter)) {
-			// Get valid coordinates in 3x3 area
-			List<Coordinate> sonarArea = getSonarArea(coordinateCenter, defenderBoard);
+		if (!isValidCoordinate(defenderBoard, center)) return false;
 
-			// must see if there is a ship in coordiante
-			for (Coordinate coordinate : sonarArea) {
-				Ship ship = currentTurn.findShipAtCoordinate(coordinate);
-				if (ship != null) {
-					// If ship found, mark as revealed
-					defenderBoard.setNewState(coordinate, BoardState.SHIPFUND);
+		boolean shipFound = false;
+		List<Coordinate> area = getSonarArea(center, defenderBoard);
+
+
+		for (Coordinate coordinate : area) {
+			Ship ship = findShipAt(coordinate, defenderBoard);
+			if (ship != null) {
+				defenderBoard.setCellState(coordinate.getRow(), coordinate.getCol(), BoardState.SHIPFUND);
+				shipFound = true;
+			}
+		}
+		return shipFound;
+	}
+
+	private List<Coordinate> getSonarArea(Coordinate center, Board board) {
+		List<Coordinate> area = new ArrayList<>();
+		for (int row = center.getRow() - 1; row <= center.getRow() + 1; row++) {
+			for (int col = center.getCol() - 1; col <= center.getCol() + 1; col++) {
+				Coordinate coord = new Coordinate(row, col);
+				if (isValidCoordinate(board, coord)) {
+					area.add(coord);
 				}
 			}
 		}
+		return area;
 	}
 
-	private boolean isValidCoordinate(Board board, Coordinate coordinate) {
-		int size = board.getBoardSize();
-		return coordinate.getRow() >= 0 && coordinate.getRow() < size &&
-				coordinate.getCol() >= 0 && coordinate.getCol() < size;
+	private Ship findShipAt(Coordinate coord, Board board) {
+		return board.getShips().stream()
+				.filter(ship -> ship.getCoordinates().contains(coord))
+				.findFirst()
+				.orElse(null);
 	}
 
+	private boolean isValidCoordinate(Board board, Coordinate coord) {
+		int size = board.getSize();
+		return coord.getRow() >= 0 && coord.getRow() < size &&
+				coord.getCol() >= 0 && coord.getCol() < size;
+	}
 }
