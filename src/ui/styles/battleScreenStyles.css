@@ -8,6 +8,7 @@
    -fx-min-width: 35px;
    -fx-min-height: 35px;
    -fx-alignment: center;
+   -fx-font-size: 25px;
 }
 
 .board-container {

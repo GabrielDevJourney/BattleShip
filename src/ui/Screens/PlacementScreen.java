@@ -146,11 +146,11 @@ public class PlacementScreen {
 		shipDialog.getDialogPane().getButtonTypes().add(ButtonType.CANCEL);
 	}
 
-	private void handleCellClick(Coordinate coord) {
+	private void handleCellClick(Coordinate coordinate) {
 		if (allPlacements == null) {
-			openShipMenu(coord);
+			openShipMenu(coordinate);
 		} else {
-			confirmPlacement(coord);
+			confirmPlacement(coordinate);
 		}
 		updateScreen();
 	}
@@ -256,7 +256,7 @@ public class PlacementScreen {
 		playerName.setText(game.getCurrentPlayerName());
 
 		Board currentBoard = game.getCurrentPlayer().getBoard();
-		boardView.updateBoard(currentBoard);
+		updateBoard(currentBoard);
 		cardView.updateCards(game.getCurrentPlayer().getCards());
 
 		uiManager.updatePlacementScreen(game);
@@ -264,8 +264,8 @@ public class PlacementScreen {
 	}
 
 	// Public update methods for UiManager
-	public void updateBoard() {
-		boardView.updateBoard(game.getCurrentPlayer().getBoard());
+	public void updateBoard(Board board) {
+		boardView.updateBoardForPlacement(game.getCurrentPlayer().getBoard());
 	}
 
 	public void updateTurnIndicator() {

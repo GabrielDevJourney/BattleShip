@@ -9,7 +9,7 @@ import src.ui.Screens.MenuScreen;
 import src.ui.Screens.PlacementScreen;
 
 public class UiManager {
-	// Core components
+	// Screens
 	private final Stage mainStage;
 	private MenuScreen menuScreen;
 	private PlacementScreen placementScreen;
@@ -54,7 +54,7 @@ public class UiManager {
 	// Screen updates
 	public void updatePlacementScreen(Game game) {
 		if (placementScreen != null) {
-			placementScreen.updateBoard();
+			placementScreen.updateBoard(game.getCurrentPlayer().getBoard());
 			placementScreen.updateTurnIndicator();
 			placementScreen.updateCards();
 		}

@@ -107,7 +107,7 @@ public class BattleScreen {
 
 	// Update methods
 	public void updateBoard(Board board) {
-		boardView.updateBoard(board);
+		boardView.updateBoardForBattle(board);
 	}
 
 	public void updateTurnIndicator(String playerName) {
@@ -118,35 +118,35 @@ public class BattleScreen {
 		cardView.updateCards(cards);
 	}
 
-	private void handleCellClick(Coordinate coord) {
+	private void handleCellClick(Coordinate coordinate) {
 		Board opponentBoard = game.getOtherPlayer().getBoard();
-		BoardState currentState = opponentBoard.getCellState(coord.getRow(), coord.getCol());
+		BoardState currentState = opponentBoard.getCellState(coordinate.getRow(), coordinate.getCol());
 
 		if (currentState == BoardState.HIT || currentState == BoardState.MISS || currentState == BoardState.SUNK) {
 			return;
 		}
 
 		if (selectedCard != null) {
-			executeCardAction(coord);
+			executeCardAttack(coordinate);
 		} else {
-			executeAttack(coord);
+			executeAttack(coordinate);
 		}
 	}
 
-	private void executeCardAction(Coordinate coordinate) {
+	private void executeCardAttack(Coordinate coordinate) {
 		if (game.useCard(selectedCard.getType(), coordinate)) {
 			Board opponentBoard = game.getOtherPlayer().getBoard();
-			boardView.updateBoard(opponentBoard);
+			updateBoard(opponentBoard);
 			updateCards(game.getCurrentPlayer().getCards());
 		}
 		selectedCard = null;
 	}
 
-	private void executeAttack(Coordinate coord) {
-		boolean isHit = game.executeAttack(coord);
+	private void executeAttack(Coordinate coordinate) {
+		boolean isHit = game.executeAttack(coordinate);
 		Board opponentBoard = game.getOtherPlayer().getBoard();
 
-		boardView.updateCellState(coord, opponentBoard.getCellState(coord.getRow(), coord.getCol()));
+		boardView.updateCellState(coordinate, opponentBoard.getCellState(coordinate.getRow(), coordinate.getCol()));
 
 		if (!isHit) {
 			handleTurnSwitch();
@@ -160,7 +160,7 @@ public class BattleScreen {
 	private void handleTurnSwitch() {
 		game.switchToNextPlayerBattle();
 		playerNameText.setText(game.getCurrentPlayer().getName() + "'s Turn");
-		boardView.updateBoard(game.getOtherPlayer().getBoard());
+		updateBoard(game.getOtherPlayer().getBoard());
 		cardView.updateCards(game.getCurrentPlayer().getCards());
 	}
 
