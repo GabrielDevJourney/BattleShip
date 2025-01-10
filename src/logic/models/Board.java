@@ -1,47 +1,35 @@
-package src.backend.models;
+package src.logic.models;
 
 import src.enums.BoardState;
-import src.utils.Coordinate;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Board {
-	private BoardState[][] board; // State of each coordinate
-	private int boardSize;
+	private final BoardState[][] cells;
+	private final List<Ship> ships;
+	private final int size;
 
-	public Board(int boardSize) {
-		this.board = new BoardState[boardSize][boardSize];
-		this.boardSize = boardSize;
-		initializeBoardState();
+	public Board(int size) {
+		this.size = size;
+		this.cells = new BoardState[size][size];
+		this.ships = new ArrayList<>();
+		initializeEmptyCells();
 	}
 
-	public int getBoardSize() {
-		return boardSize;
-	}
+	// Getters/Setters
+	public int getSize() { return size; }
+	public List<Ship> getShips() { return ships; }
+	public void addShip(Ship ship) { ships.add(ship); }
+	public BoardState getCellState(int row, int col) { return cells[row][col]; }
+	public void setCellState(int row, int col, BoardState state) { cells[row][col] = state; }
 
-	private void initializeBoardState() {
-		for (int x = 0; x < board.length; x++) {
-			for (int y = 0; y < board[x].length; y++) {
-				board[x][y] = BoardState.WATER; // Initialize all positions to WATER
+	private void initializeEmptyCells() {
+		for (int i = 0; i < size; i++) {
+			for (int j = 0; j < size; j++) {
+				cells[i][j] = BoardState.WATER;
 			}
 		}
 	}
 
-	public BoardState getCurrentState(Coordinate coordinate) {
-		return board[coordinate.getRow()][coordinate.getCol()];
-	}
-
-	public void setNewState(Coordinate coordinate, BoardState newState) {
-		board[coordinate.getRow()][coordinate.getCol()] = newState;
-	}
-
-	public boolean isTargetable(Coordinate coordinate) {
-		return getCurrentState(coordinate) == BoardState.WATER; // Only targetable if it's WATER
-	}
-
-	public void placeShip(Coordinate[] shipCoordinates) {
-		for (Coordinate coord : shipCoordinates) {
-			board[coord.getRow()][coord.getCol()] = BoardState.SHIP; // Place ship on the board
-		}
-	}
 }

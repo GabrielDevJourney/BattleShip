@@ -4,8 +4,9 @@ public enum BoardState {
 	WATER("🌊"),//🌊
 	MISS("💨"),//💨
 	HIT("🎯"),//🎯
-	SUNK("☠\uFE0F"),//☠️
-	SHIP("🚢");//🚢
+	SUNK("\uD83E\uDEE0"),//🫠
+	SHIP("🚢"),//🚢
+	SHIPFUND("🔍");
 
 	private final String boardState;
 
