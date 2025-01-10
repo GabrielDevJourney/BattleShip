@@ -9,39 +9,150 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
-import src.backend.game.Game;
+import src.logic.game.Game;
+import src.logic.models.Board;
+import src.logic.models.Ship;
 import src.enums.BoardState;
 import src.enums.ShipType;
 import src.ui.UiManager;
 import src.ui.components.BoardView;
+import src.ui.components.CardView;
 import src.utils.Coordinate;
 import src.utils.ShipPlacementManager;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class PlacementScreen {
-	private final UiManager uiManager;//todo for going to battle screen
+	private final UiManager uiManager;
+	private final Game game;
 	private Scene placementScene;
+
+	// Layout containers
 	private VBox mainLayout;
 	private HBox boardContainer;
 	private VBox placementRulesContainer;
 	private VBox playerNameContainer;
+
+	// UI components
 	private BoardView boardView;
-	private Game game;
+	private CardView cardView;
 	private Dialog<ShipType> shipDialog;
+
+	// Placement state
 	private List<List<Coordinate>> allPlacements;
 	private ShipType selectedShip;
 
 	public PlacementScreen(UiManager uiManager, Game game) {
 		this.uiManager = uiManager;
 		this.game = game;
-		initializeShipsDialog();
+
+		if (!game.getSettings().isManualPlacement()) {
+			uiManager.switchToBattle(game);
+			return;
+		}
+
 		createPlacementScreen();
+		initializeShipDialog();
 	}
 
 	public Scene getScene() {
 		return placementScene;
+	}
+
+
+	private void createPlacementScreen() {
+		mainLayout = new VBox(20);
+		mainLayout.setAlignment(Pos.CENTER);
+
+		createPlayerNameContainer();
+		createBoardContainer();
+		createCardContainer();
+		createPlacementRulesContainer();
+
+		mainLayout.getChildren().addAll(
+				playerNameContainer,
+				boardContainer,
+				cardView,
+				placementRulesContainer
+		);
+
+		placementScene = new Scene(mainLayout);
+		loadStylesheet();
+	}
+
+	private void loadStylesheet() {
+		String cssPath = "file:///Users/mindera/Documents/minderaSchool/BattleShip/src/ui/styles/placementScreenStyle.css";
+		try {
+			placementScene.getStylesheets().add(cssPath);
+		} catch (Exception e) {
+			System.err.println("Failed to load CSS file: " + cssPath);
+			e.printStackTrace();
+		}
+	}
+
+	private void createPlayerNameContainer() {
+		playerNameContainer = new VBox(10);
+		playerNameContainer.setAlignment(Pos.TOP_CENTER);
+
+		Text playerName = new Text(game.getCurrentPlayerName());
+		playerName.getStyleClass().add("title-text");
+
+		playerNameContainer.getChildren().add(playerName);
+	}
+
+	private void createBoardContainer() {
+		boardContainer = new HBox(10);
+		boardContainer.setAlignment(Pos.CENTER);
+		boardContainer.getStyleClass().add("board-container");
+
+		boardView = new BoardView(game.getBoardSize());
+		boardView.setOnCellClicked(this::handleCellClick);
+
+		boardContainer.getChildren().add(boardView);
+	}
+
+	private void createCardContainer() {
+		cardView = new CardView(game.getCurrentPlayer().getCards());
+	}
+
+	private void createPlacementRulesContainer() {
+		placementRulesContainer = new VBox(10);
+		placementRulesContainer.setAlignment(Pos.CENTER);
+
+		Text header = new Text("Placement Rules");
+		header.getStyleClass().add("title-text");
+
+		Text rules = new Text("""
+               1. Click on a cell to open the ship selection menu
+               2. Choose a ship from the available options
+               3. Valid placement options will be highlighted
+               4. Click on a highlighted cell to place your ship
+               5. Ships cannot touch each other
+               6. Repeat until all ships are placed""");
+		rules.getStyleClass().add("simple-text");
+		rules.setTextAlignment(TextAlignment.LEFT);
+
+		placementRulesContainer.getChildren().addAll(header, rules);
+	}
+
+	private void initializeShipDialog() {
+		shipDialog = new Dialog<>();
+		VBox shipMenu = new VBox(10);
+		shipDialog.setTitle("Choose a ship for placement!");
+		shipDialog.getDialogPane().setContent(shipMenu);
+		shipDialog.getDialogPane().getButtonTypes().add(ButtonType.CANCEL);
+	}
+
+	private void handleCellClick(Coordinate coord) {
+		if (allPlacements == null) {
+			openShipMenu(coord);
+		} else {
+			confirmPlacement(coord);
+		}
+		updateScreen();
 	}
 
 	private void openShipMenu(Coordinate clickedCoordinate) {
@@ -63,166 +174,107 @@ public class PlacementScreen {
 		shipDialog.showAndWait();
 	}
 
-	//* UI CREATION METHODS
+	private void handleShipSelection(ShipType shipType, Coordinate coordinate) {
+		boardView.clearShadows();
+		selectedShip = shipType;
 
-	private void initializeShipsDialog() {
-		shipDialog = new Dialog<>();
-		VBox shipmenu = new VBox(10);
-		shipDialog.setTitle("Choose a ship for placement!");
-		shipDialog.getDialogPane().setContent(shipmenu);
-		shipDialog.getDialogPane().getButtonTypes().add(ButtonType.CANCEL);
-	}
-
-	private void createPlacementScreen() {
-		mainLayout = new VBox(20);
-		mainLayout.setAlignment(Pos.CENTER);
-
-		createPlayerNameContainer();
-		createBoardContainer();
-		createPlacementRulesContainer();
-
-		mainLayout.getChildren().addAll(
-				playerNameContainer,
-				boardContainer,
-				placementRulesContainer
-		);
-
-		placementScene = new Scene(mainLayout);
-
-		String cssPath = "file:///Users/mindera/Documents/mindera/BattleShip/src/ui/styles/placementScreenStyle.css";
-		try {
-			placementScene.getStylesheets().add(cssPath);
-			System.out.println("CSS file loaded successfully");
-		} catch (Exception e) {
-			System.err.println("Failed to load CSS file: " + cssPath);
-			e.printStackTrace();
-		}
-	}
-
-	//* HANDLE UI CREATION
-	private void createPlayerNameContainer() {
-		playerNameContainer = new VBox(10);
-		playerNameContainer.setAlignment(Pos.TOP_CENTER);
-
-		Text playerName = new Text(game.getCurrentPlayerName());
-		playerName.getStyleClass().add("title-text");
-
-		playerNameContainer.getChildren().add(playerName);
-	}
-
-	private void createBoardContainer() {
-		boardContainer = new HBox(10);
-		boardContainer.setAlignment(Pos.CENTER);
-		boardContainer.setStyle("-fx-border-color: green; -fx-border-width: 2px; -fx-border-style: solid;" +
-				"-fx-border-radius: 10px;");
-
-		boardView = new BoardView(game.getBoardSize());
-		boardView.setOnCellClicked(this::handleCellClick);
-
-
-		boardContainer.getChildren().add(boardView);
-	}
-
-	private void createPlacementRulesContainer() {
-		placementRulesContainer = new VBox(10);
-		placementRulesContainer.setAlignment(Pos.CENTER);
-
-		Text header = new Text("Placement Rules");
-		header.getStyleClass().add("title-text");
-
-		Text rules = new Text("""
-				1. Click on a cell to open the ship selection menu.
-				2. Choose a ship from the available options.
-				3. Valid placement options will be highlighted.
-				4. Click on a highlighted cell to place your ship.
-				5. Ships cannot touch each other. Always leave at least one empty cell between ships.
-				6. Repeat until all ships are placed.""");
-		rules.getStyleClass().add("simple-text");
-		rules.setTextAlignment(TextAlignment.LEFT);
-
-		placementRulesContainer.getChildren().addAll(header, rules);
-	}
-
-
-	//* HANDLE SHIPS PREVIEW PLACEMENTS
-	private void handleShipSelection(ShipType selectedShip, Coordinate clickedCoordinate) {
-		this.selectedShip = selectedShip;
 		allPlacements = ShipPlacementManager.getPossiblePlacements(
-				clickedCoordinate,
+				coordinate,
 				selectedShip.getShipSize(),
 				boardView.getBoardSize(),
 				game.getPlacedShips()
 		);
 
-		if (allPlacements != null) {
+		if (allPlacements != null && !allPlacements.isEmpty()) {
 			boardView.displayAllShadowPlacements(allPlacements);
 		}
 	}
 
 	private void confirmPlacement(Coordinate clickedCoordinate) {
+		if (allPlacements == null) return;
+
 		for (List<Coordinate> placement : allPlacements) {
-			if (placement.contains(clickedCoordinate)) {
-				if (!ShipPlacementManager.isShipOverlapping(placement, game.getPlacedShips()) &&
-						!ShipPlacementManager.isShipTooClose(placement, game.getPlacedShips())) {
-					placement.forEach(coordinate ->
-							boardView.updateCellState(coordinate, BoardState.SHIP)
-					);
-					game.placeShip(placement);  // Add the new ship to the game's placed ships
-					boardView.clearShadows();
-					game.decrementShipCount(selectedShip);
-					checkPlayerPlacementComplete();
-					allPlacements = null;
-					selectedShip = null;
-					return;
-				} else {
-					return;
-				}
+			if (placement.contains(clickedCoordinate) && isValidPlacement(placement)) {
+				boardView.clearShadows();
+				placeShip(placement);
+				checkPlayerPlacementComplete();
+
+				allPlacements = null;
+				selectedShip = null;
+				return;
 			}
 		}
-		// If clicked outside valid placements, clear shadows
-		cancelPlacement();
-	}
 
-	private void cancelPlacement() {
 		boardView.clearShadows();
 		allPlacements = null;
 		selectedShip = null;
 	}
 
-	private void handleCellClick(Coordinate clickedCoordinate) {
-		if (allPlacements == null) {
-			openShipMenu(clickedCoordinate);
-		} else {
-			confirmPlacement(clickedCoordinate);
-		}
+	private boolean isValidPlacement(List<Coordinate> placement) {
+		List<List<Coordinate>> existingShips = game.getCurrentPlayer().getBoard().getShips()
+				.stream()
+				.map(Ship::getCoordinates)
+				.collect(Collectors.toList());
+
+		return !ShipPlacementManager.isShipOverlapping(placement, existingShips) &&
+				!ShipPlacementManager.isShipTooClose(placement, existingShips);
 	}
 
-	//*HANDLE NEXT PLAYER PLACEMENT
+	private void placeShip(List<Coordinate> placement) {
+		Ship ship = game.createShip(selectedShip);
+		ship.setCoordinates(placement);
+		game.fillPlayerShips(ship, game.getCurrentPlayer());
+
+		placement.forEach(coordinate -> {
+			game.getCurrentPlayer().getBoard().setCellState(
+					coordinate.getRow(),
+					coordinate.getCol(),
+					BoardState.SHIP
+			);
+			boardView.updateCellState(coordinate, BoardState.SHIP);
+		});
+
+		game.decrementShipCount(selectedShip);
+	}
+
 	private void checkPlayerPlacementComplete() {
-		//to be able to confirm if is time for next player to do placement i must check if the values of ships this
-		// means amount of each available ships has reach zero meaning player has finish all his ships placement, so
-		// if there is a next player then reset screen and allow next player to do his placement then cuz only exsit
-		// 2 player will fallback to swtiching screen and battle will start based on the 2 boards previous setup
-		if (game.getAvailableShips()
-				.values()
-				.stream()
-				.allMatch(count -> count == 0)) {
+		Map<ShipType, Integer> availableShips = game.getCurrentPlayerAvailableShips();
+
+		if (availableShips.values().stream().allMatch(count -> count == 0)) {
 			if (game.hasNextPlayer()) {
-				game.nextPlayer();//behaves like an iterator
-				resetPlacementScreen();
+				game.switchToNextPlayerPlacement();
+				boardView.clearBoard();
+				updateScreen();
 			} else {
-				uiManager.switchToBattle();
+				uiManager.switchToBattle(game);
 			}
 		}
 	}
 
-	private void resetPlacementScreen(){
-		boardView.clearBoard();
-		updatePlayerName();
-	}
-
-	private void updatePlayerName(){
+	private void updateScreen() {
 		Text playerName = (Text) playerNameContainer.getChildren().get(0);
 		playerName.setText(game.getCurrentPlayerName());
+
+		Board currentBoard = game.getCurrentPlayer().getBoard();
+		boardView.updateBoard(currentBoard);
+		cardView.updateCards(game.getCurrentPlayer().getCards());
+
+		uiManager.updatePlacementScreen(game);
+		mainLayout.requestLayout();
 	}
+
+	// Public update methods for UiManager
+	public void updateBoard() {
+		boardView.updateBoard(game.getCurrentPlayer().getBoard());
+	}
+
+	public void updateTurnIndicator() {
+		Text playerName = (Text) playerNameContainer.getChildren().get(0);
+		playerName.setText(game.getCurrentPlayerName() + "'s Turn");
+	}
+
+	public void updateCards() {
+		cardView.updateCards(game.getCurrentPlayer().getCards());
+	}
+
 }
