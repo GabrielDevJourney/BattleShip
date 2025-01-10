@@ -102,6 +102,7 @@ public class ShipPlacementManager {
 	}
 
 	private static boolean isAdjacent(Coordinate coordinate1, Coordinate coordinate2) {
+		//either 1 or -1 means once coordinate of gap between ship placements
 		return Math.abs(coordinate1.getRow() - coordinate2.getRow()) <= 1 &&
 				Math.abs(coordinate1.getCol() - coordinate2.getCol()) <= 1;
 	}
