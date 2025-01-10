@@ -126,12 +126,12 @@ public class PlacementScreen {
 		header.getStyleClass().add("title-text");
 
 		Text rules = new Text("""
-               1. Click on a cell to open the ship selection menu
-               2. Choose a ship from the available options
-               3. Valid placement options will be highlighted
-               4. Click on a highlighted cell to place your ship
-               5. Ships cannot touch each other
-               6. Repeat until all ships are placed""");
+				1. Click on a cell to open the ship selection menu
+				2. Choose a ship from the available options
+				3. Valid placement options will be highlighted
+				4. Click on a highlighted cell to place your ship
+				5. Ships cannot touch each other
+				6. Repeat until all ships are placed""");
 		rules.getStyleClass().add("simple-text");
 		rules.setTextAlignment(TextAlignment.LEFT);
 
