@@ -2,7 +2,7 @@ package src.enums;
 
 public enum BoardState {
 	WATER("🌊"),//🌊
-	MISS("💨"),//💨
+	MISS("\uD83D\uDCA9"),//💩
 	HIT("🎯"),//🎯
 	SUNK("\uD83E\uDEE0"),//🫠
 	SHIP("🚢"),//🚢

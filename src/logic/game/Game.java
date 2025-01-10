@@ -89,7 +89,7 @@ public class Game {
 		return ShipPlacementManager.getPossiblePlacements(
 				start,
 				type.getShipSize(),
-				currentPlayer.getBoard().getSize(),
+				getBoardSize(),
 				existingShips
 		);
 	}
