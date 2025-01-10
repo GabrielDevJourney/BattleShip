@@ -70,7 +70,7 @@ public class BoardView extends GridPane {
 		this.onCellClicked = onCellClicked;
 	}
 
-	public void updateBoard(Board board) {
+	public void updateBoardForBattle(Board board) {
 		for (int row = 0; row < boardSize; row++) {
 			for (int col = 0; col < boardSize; col++) {
 				BoardState state = board.getCellState(row, col);
@@ -81,6 +81,15 @@ public class BoardView extends GridPane {
 				} else {
 					cells[row][col].setText(state.getBoardState());
 				}
+			}
+		}
+	}
+
+	public void updateBoardForPlacement(Board board) {
+		for (int row = 0; row < boardSize; row++) {
+			for (int col = 0; col < boardSize; col++) {
+				BoardState state = board.getCellState(row, col);
+				cells[row][col].setText(state.getBoardState());
 			}
 		}
 	}
