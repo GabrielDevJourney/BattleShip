@@ -1,10 +1,4 @@
-<<<<<<< HEAD
-
 # 🎮Battleship Game
-=======
-```md
-# 🎮 Enhanced Battleship Game
->>>>>>> e4f4536 (missing commit)
 
 ## 📋 Table of Contents
 * [👋 Introduction](#-introduction)
@@ -50,11 +44,7 @@ Enhanced Battleship Game is a Java-based implementation of the classic naval war
 
 * **Visual Feedback System**
   - Emoji-based board representation
-<<<<<<< HEAD
   - 🌊 (Water) 💩 (Miss) 🎯 (Hit) 🫠 (Sunk) 🚢 (Ship) 🔍 (Sonar)
-=======
-  - 🌊 (Water) 💨 (Miss) 🎯 (Hit) ☠️ (Sunk) 🚢 (Ship) 🔍 (Sonar)
->>>>>>> e4f4536 (missing commit)
   - Dynamic UI updates
 
 ## 🛠️ Development Process
@@ -78,10 +68,6 @@ Enhanced Battleship Game is a Java-based implementation of the classic naval war
 4. **Testing & Refinement**
    - Gameplay mechanics testing
    - Bug fixes and optimizations
-<<<<<<< HEAD
-=======
-   - User feedback integration
->>>>>>> e4f4536 (missing commit)
 
 ## 🎓 Key Learnings
 * **OOP Principles**
@@ -128,10 +114,6 @@ Enhanced Battleship Game is a Java-based implementation of the classic naval war
   - Statistics tracking system
 
 * **Technical Enhancements**
-<<<<<<< HEAD
-=======
-  - Unit test implementation
->>>>>>> e4f4536 (missing commit)
   - Sound effects integration
   - Save/Load game functionality
   - Settings customization
@@ -145,18 +127,10 @@ Enhanced Battleship Game is a Java-based implementation of the classic naval war
 6. Sink all enemy ships to win
 
 ## 📸 Screenshots
-<<<<<<< HEAD
 <img width="1008" alt="image" src="https://github.com/user-attachments/assets/ecf5dd8d-004d-42d2-880d-7968de9f8915" />
 <img width="1008" alt="image" src="https://github.com/user-attachments/assets/78d2fa69-dd3b-4a31-844c-422407e2387a" />
 <img width="1008" alt="image" src="https://github.com/user-attachments/assets/d125d20f-c639-4799-bcf6-5638c4daaf2e" />
 <img width="1008" alt="image" src="https://github.com/user-attachments/assets/7b52cb1c-7d15-49b1-95ce-dd241dedceff" />
 <img width="1008" alt="image" src="https://github.com/user-attachments/assets/ada1bc2b-2385-462c-98ad-be82e398e8ab" />
----
-Project developed as part of the Mindera School Java learning curriculum. Feedback and contributions welcome!
-=======
-[Add your game screenshots here]
 
----
 Project developed as part of the Mindera School Java learning curriculum. Feedback and contributions welcome!
-```
->>>>>>> e4f4536 (missing commit)
