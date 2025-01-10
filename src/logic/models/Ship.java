@@ -4,6 +4,7 @@ import src.utils.Coordinate;
 import src.enums.ShipType;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Abstract base class for all ships in the game.
@@ -51,20 +52,8 @@ public abstract class Ship {
 	/**
 	 * fills ship coordinates will coordinates validated trough gameValidator
 	 */
-	public void fillCoordinates(ArrayList<Coordinate> newCoordinates) {
-		if (newCoordinates.size() != size) {
-			return;
-		}
-
-		for (Coordinate newCoordinate : newCoordinates) {
-			//since using list i can use stream to then see if there is any match
-			//anyMatch will use followed rule to check newCordinate with existing list coordinates
-			if (coordinates.stream().anyMatch(existentCoordinate ->
-					existentCoordinate.equals(newCoordinate))) {
-				return;//already exists placed ship in this coordinates
-			}
-		}
-		coordinates = newCoordinates; //no ship in here
+	public void fillCoordinates(List<Coordinate> newCoordinates) {
+		coordinates = new ArrayList<>(newCoordinates); // Set coordinates when placing the ship
 	}
 
 	/**

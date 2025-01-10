@@ -1,4 +1,4 @@
-package src.backend.game;
+package src.logic.game;
 
 import src.enums.BoardSizeOption;
 import src.enums.PlacementOption;
