@@ -1,21 +1,29 @@
-package src.logic.models;
+package src.logic.models.cards;
 
 import src.logic.game.Game;
 import src.enums.CardType;
+import src.logic.models.PlayerService;
 import src.utils.Coordinate;
 
 public abstract class Card {
-	private final CardType type;
 	private boolean available;
 	private int lastRoundOfUsage = -1;
 
-	protected Card(CardType type) {
-		this.type = type;
+	protected Card() {
 		this.available = true;
 	}
 
 	// Getters/Setters
-	public CardType getType() { return type; }
+	public abstract CardType getType();
+
+
+
+
+
+
+
+
+
 	public boolean isAvailable() { return available; }
 	public int getLastRoundOfUsage() {
 		return lastRoundOfUsage;
@@ -26,5 +34,5 @@ public abstract class Card {
 	public void setAvailable(boolean available) { this.available = available; }
 
 	// New execute method for cards that works with Game and Players directly instead of Turn
-	public abstract boolean executeCard(Game game, Player attacker, Player defender, Coordinate center);
+	public abstract boolean executeCard(Game game, PlayerService attacker, PlayerService defender, Coordinate center);
 }

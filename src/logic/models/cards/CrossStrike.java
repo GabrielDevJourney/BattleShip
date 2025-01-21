@@ -1,22 +1,23 @@
-package src.logic.cards;
+package src.logic.models.cards;
 
+import src.enums.CardType;
 import src.logic.game.Game;
-import src.logic.models.Board;
-import src.logic.models.Card;
-import static src.enums.CardType.CROSS_STRIKE;
+import src.logic.game.BoardService;
 
-import src.logic.models.Player;
+import src.logic.models.PlayerService;
 import src.utils.Coordinate;
 
 
 public class CrossStrike extends Card {
-	public CrossStrike() {
-		super(CROSS_STRIKE);
+
+	@Override
+	public CardType getType() {
+		return CardType.CROSS_STRIKE;
 	}
 
 	@Override
-	public boolean executeCard(Game game, Player attacker, Player defender, Coordinate center) {
-		Board defenderBoard = defender.getBoard();
+	public boolean executeCard(Game game, PlayerService attacker, PlayerService defender, Coordinate center) {
+		BoardService defenderBoard = defender.getBoard();
 		int centerRow = center.getRow();
 		int centerCol = center.getCol();
 		boolean canHit = false;
@@ -34,7 +35,7 @@ public class CrossStrike extends Card {
 		return canHit;
 	}
 
-	private boolean isValidCoordinate(Board board, Coordinate coordinate) {
+	private boolean isValidCoordinate(BoardService board, Coordinate coordinate) {
 		int size = board.getSize();
 		return coordinate.getRow() >= 0 && coordinate.getRow() < size &&
 				coordinate.getCol() >= 0 && coordinate.getCol() < size;

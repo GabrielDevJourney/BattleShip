@@ -1,26 +1,19 @@
-package src.logic.models;
+package src.logic.game;
 
 import src.enums.BoardState;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class Board {
-	private final BoardState[][] cells;
-	private final List<Ship> ships;
+public class BoardService {
+	private ShipService shipService
 	private final int size;
 
-	public Board(int size) {
+	public BoardService(int size) {
 		this.size = size;
 		this.cells = new BoardState[size][size];
-		this.ships = new ArrayList<>();
 		initializeEmptyCells();
 	}
 
 	// Getters/Setters
 	public int getSize() { return size; }
-	public List<Ship> getShips() { return ships; }
-	public void addShip(Ship ship) { ships.add(ship); }
 	public BoardState getCellState(int row, int col) { return cells[row][col]; }
 	public void setCellState(int row, int col, BoardState state) { cells[row][col] = state; }
 

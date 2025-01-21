@@ -3,7 +3,7 @@ package src.ui;
 import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 import src.logic.game.Game;
-import src.logic.models.Player;
+import src.logic.models.PlayerService;
 import src.ui.Screens.BattleScreen;
 import src.ui.Screens.MenuScreen;
 import src.ui.Screens.PlacementScreen;
@@ -66,7 +66,7 @@ public class UiManager {
 		alert.setTitle("Game Over");
 		alert.setHeaderText("Game Finished!");
 
-		Player winner = game.getCurrentPlayer().hasLost() ?
+		PlayerService winner = game.getCurrentPlayer().hasLost() ?
 				game.getOtherPlayer() : game.getCurrentPlayer();
 
 		alert.setContentText(winner.getName() + " has won the game!");

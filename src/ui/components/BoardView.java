@@ -3,7 +3,7 @@ package src.ui.components;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import src.enums.BoardState;
-import src.logic.models.Board;
+import src.logic.game.BoardService;
 import src.utils.Coordinate;
 
 import java.util.Arrays;
@@ -70,7 +70,7 @@ public class BoardView extends GridPane {
 		this.onCellClicked = onCellClicked;
 	}
 
-	public void updateBoardForBattle(Board board) {
+	public void updateBoardForBattle(BoardService board) {
 		for (int row = 0; row < boardSize; row++) {
 			for (int col = 0; col < boardSize; col++) {
 				BoardState state = board.getCellState(row, col);
@@ -85,7 +85,7 @@ public class BoardView extends GridPane {
 		}
 	}
 
-	public void updateBoardForPlacement(Board board) {
+	public void updateBoardForPlacement(BoardService board) {
 		for (int row = 0; row < boardSize; row++) {
 			for (int col = 0; col < boardSize; col++) {
 				BoardState state = board.getCellState(row, col);

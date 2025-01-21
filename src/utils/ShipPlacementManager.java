@@ -3,6 +3,7 @@ package src.utils;
 import java.util.ArrayList;
 import java.util.List;
 
+//FIXME: add private constructor
 public class ShipPlacementManager {
 	// Main method that checks all possible ways to place a ship from a starting point
 	public static List<List<Coordinate>> getPossiblePlacements(Coordinate start, int shipSize, int boardSize, List<List<Coordinate>> existingShips) {

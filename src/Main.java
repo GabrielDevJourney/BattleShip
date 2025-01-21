@@ -7,7 +7,7 @@ import src.ui.UiManager;
 public class Main extends Application {
 	@Override
 	public void start(Stage stage) {
-		UiManager uiManager = new UiManager(stage);
+		new UiManager(stage);
 		stage.setWidth(1000);
 		stage.setHeight(1200);
 		stage.setResizable(false);

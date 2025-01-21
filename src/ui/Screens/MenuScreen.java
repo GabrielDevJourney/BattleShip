@@ -91,7 +91,6 @@ public class MenuScreen {
 			menuScene.getStylesheets().add(cssPath);
 		} catch (Exception e) {
 			System.err.println("Failed to load CSS file: " + cssPath);
-			e.printStackTrace();
 		}
 	}
 

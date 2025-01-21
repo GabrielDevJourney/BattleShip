@@ -2,7 +2,7 @@ package src.ui.components;
 
 import javafx.scene.layout.VBox;
 import javafx.scene.control.Button;
-import src.logic.models.Card;
+import src.logic.models.cards.Card;
 import src.enums.CardType;
 
 import java.util.Map;

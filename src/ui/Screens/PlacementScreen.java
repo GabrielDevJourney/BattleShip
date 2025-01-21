@@ -10,8 +10,8 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import src.logic.game.Game;
-import src.logic.models.Board;
-import src.logic.models.Ship;
+import src.logic.game.BoardService;
+import src.logic.models.ships.Ship;
 import src.enums.BoardState;
 import src.enums.ShipType;
 import src.ui.UiManager;
@@ -255,7 +255,7 @@ public class PlacementScreen {
 		Text playerName = (Text) playerNameContainer.getChildren().get(0);
 		playerName.setText(game.getCurrentPlayerName());
 
-		Board currentBoard = game.getCurrentPlayer().getBoard();
+		BoardService currentBoard = game.getCurrentPlayer().getBoard();
 		updateBoard(currentBoard);
 		cardView.updateCards(game.getCurrentPlayer().getCards());
 
@@ -264,7 +264,7 @@ public class PlacementScreen {
 	}
 
 	// Public update methods for UiManager
-	public void updateBoard(Board board) {
+	public void updateBoard(BoardService board) {
 		boardView.updateBoardForPlacement(game.getCurrentPlayer().getBoard());
 	}
 

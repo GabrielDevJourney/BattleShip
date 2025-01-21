@@ -1,4 +1,4 @@
-package src.logic.sound;
+package src.logic.manager;
 
 public class SoundManager {
 }

@@ -8,8 +8,8 @@ import javafx.scene.text.Text;
 import src.enums.BoardState;
 import src.enums.CardType;
 import src.logic.game.Game;
-import src.logic.models.Board;
-import src.logic.models.Card;
+import src.logic.game.BoardService;
+import src.logic.models.cards.Card;
 import src.ui.UiManager;
 import src.ui.components.BoardView;
 import src.ui.components.CardView;
@@ -106,7 +106,7 @@ public class BattleScreen {
 	}
 
 	// Update methods
-	public void updateBoard(Board board) {
+	public void updateBoard(BoardService board) {
 		boardView.updateBoardForBattle(board);
 	}
 
@@ -119,7 +119,7 @@ public class BattleScreen {
 	}
 
 	private void handleCellClick(Coordinate coordinate) {
-		Board opponentBoard = game.getOtherPlayer().getBoard();
+		BoardService opponentBoard = game.getOtherPlayer().getBoard();
 		BoardState currentState = opponentBoard.getCellState(coordinate.getRow(), coordinate.getCol());
 
 		if (currentState == BoardState.HIT || currentState == BoardState.MISS || currentState == BoardState.SUNK) {
@@ -135,7 +135,7 @@ public class BattleScreen {
 
 	private void executeCardAttack(Coordinate coordinate) {
 		if (game.useCard(selectedCard.getType(), coordinate)) {
-			Board opponentBoard = game.getOtherPlayer().getBoard();
+			BoardService opponentBoard = game.getOtherPlayer().getBoard();
 			updateBoard(opponentBoard);
 			updateCards(game.getCurrentPlayer().getCards());
 		}
@@ -144,7 +144,7 @@ public class BattleScreen {
 
 	private void executeAttack(Coordinate coordinate) {
 		boolean isHit = game.executeAttack(coordinate);
-		Board opponentBoard = game.getOtherPlayer().getBoard();
+		BoardService opponentBoard = game.getOtherPlayer().getBoard();
 
 		boardView.updateCellState(coordinate, opponentBoard.getCellState(coordinate.getRow(), coordinate.getCol()));
 

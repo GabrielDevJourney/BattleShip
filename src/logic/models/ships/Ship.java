@@ -1,7 +1,7 @@
-package src.logic.models;
+package src.logic.models.ships;
 
-import src.utils.Coordinate;
 import src.enums.ShipType;
+import src.utils.Coordinate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,22 +12,17 @@ import java.util.List;
  */
 
 public abstract class Ship {
-	private final ShipType type;
-	private final int size;
 	private int hits;
 	private List<Coordinate> coordinates;
 
-	protected Ship(ShipType type) {
-		this.type = type;
-		this.size = type.getShipSize();
+	protected Ship() {
 		this.hits = 0;
 		this.coordinates = new ArrayList<>();
 	}
 
-	// Getters/Setters
-	public ShipType getType() { return type; }
+	public abstract ShipType getType();
 	public void incrementHits() { hits++; }
+	public int getHits() { return hits; }
 	public List<Coordinate> getCoordinates() { return coordinates; }
 	public void setCoordinates(List<Coordinate> coordinates) { this.coordinates = coordinates; }
-	public boolean isSunk() { return hits >= size; }
 }

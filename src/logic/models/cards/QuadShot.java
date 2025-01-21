@@ -1,12 +1,10 @@
-package src.logic.cards;
+package src.logic.models.cards;
 import src.enums.BoardState;
+import src.enums.CardType;
 import src.logic.game.Game;
-import src.logic.models.Board;
-import src.logic.models.Card;
+import src.logic.game.BoardService;
 
-import static src.enums.CardType.QUAD_SHOT;
-
-import src.logic.models.Player;
+import src.logic.models.PlayerService;
 import src.utils.Coordinate;
 
 import java.util.ArrayList;
@@ -16,18 +14,19 @@ import java.util.List;
 public class QuadShot extends Card {
 	private static final int NUMBER_OF_SHOTS = 4;
 
-	public QuadShot() {
-		super(QUAD_SHOT);
+	@Override
+	public CardType getType() {
+		return CardType.QUAD_SHOT;
 	}
 
 	@Override
-	public boolean executeCard(Game game, Player attacker, Player defender, Coordinate center) {
-		Board defenderBoard = defender.getBoard();
+	public boolean executeCard(Game game, PlayerService attacker, PlayerService defender, Coordinate center) {
+		BoardService defenderBoard = defender.getBoard();
 		List<Coordinate> validTargets = getValidTargets(defenderBoard);
 		return executeRandomAttacks(game, validTargets);
 	}
 
-	private List<Coordinate> getValidTargets(Board board) {
+	private List<Coordinate> getValidTargets(BoardService board) {
 		List<Coordinate> targets = new ArrayList<>();
 		for (int row = 0; row < board.getSize(); row++) {
 			for (int col = 0; col < board.getSize(); col++) {
